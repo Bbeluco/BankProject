@@ -20,6 +20,8 @@ builder.Services.AddDbContext<BankAppContext>(options => {
 });
 
 builder.Services.AddScoped<IPayableService, PayableService>();
+builder.Services.AddScoped<IAssignorRepository, AssignorRepository>();
+builder.Services.AddScoped<IPayableRepository, PayableRepository>();
 
 var app = builder.Build();
 

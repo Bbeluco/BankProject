@@ -10,42 +10,42 @@ namespace BankProject;
 
 public class PayableService : IPayableService
 {
-    public async Task<IResult> Payable(PayableDTO dto)
-    {
-        // string nullItems = CheckIfAnyFieldIsNull(dto);
-        // if(nullItems != ""){
-        //     return Results.BadRequest(new ErrorMessagesDTO { ErrorMessage = "The following parameters where null: " + nullItems });
-        // }
+    private IAssignorRepository _assignorRepository { get; set; }
+    private IPayableRepository _payableRepository { get; set; }
 
-        // Guid guidOutput = new Guid();
-        // bool isValid = Guid.TryParse(dto.Receivable.Id, out guidOutput);
-        // if(!isValid) {
-
-        //     return Results.BadRequest(new ErrorMessagesDTO { ErrorMessage = "receivable.id is not an UUID" });
-        // }
-
-        return Results.Ok(dto);
+    public PayableService(IAssignorRepository assignorRepository, IPayableRepository payableRepository) {
+        _assignorRepository = assignorRepository;
+        _payableRepository = payableRepository;
     }
 
-    private string CheckIfAnyFieldIsNull(PayableDTO dto) {
-        string[] result = [];
-        PropertyInfo[] propsReceivable = dto.Receivable.GetType().GetProperties();
-        PropertyInfo[] propsAssignor = dto.Receivable.GetType().GetProperties();
-
-        foreach (var item in propsReceivable)
-        {
-            System.Console.WriteLine("item: " + item);
-            if(item == null) {
-                result.Append(item.ToString().ToLower());
-            }
+    public async Task<IResult> Payable(PayableDTO dto)
+    {
+        Guid guidOutput = new Guid();
+        bool isValid = Guid.TryParse(dto.Receivable.Id, out guidOutput);
+        if(!isValid) {
+            return Results.BadRequest(new ErrorMessagesDTO { ErrorMessage = "receivable.id is not an UUID" });
         }
 
-        foreach (var item in propsAssignor)
-        {
-            if(item == null) {
-                result.Append(item.ToString().ToLower());
-            }
-        }
-        return string.Join(", ", result);
+        AssignorModel assignor = new AssignorModel() {
+            Document = dto.Assignor.Document,
+            Email = dto.Assignor.Email,
+            Phone = dto.Assignor.Phone,
+            Name = dto.Assignor.Name
+        };
+
+        var newAssignor = _assignorRepository.InsertAssignor(assignor);
+
+        ReceivableModel receivable = new ReceivableModel() {
+            Id = dto.Receivable.Id,
+            Value = dto.Receivable.Value,
+            Date = dto.Receivable.Date,
+            AssignorId = newAssignor.AssignorId
+        };
+
+        _payableRepository.InsertReceivable(receivable);
+
+        ResponsePayableDTO resp = new ResponsePayableDTO(dto, newAssignor.AssignorId);
+
+        return Results.Ok(resp);
     }
 }

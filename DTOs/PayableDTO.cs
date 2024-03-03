@@ -16,8 +16,6 @@ public class Receivable {
     public double Value { get; set; }
     [RangeDate(-100)]
     public DateTime Date { get; set; }
-    [Range(1, int.MaxValue)]
-    public int Assignor { get; set; }
 }
 
 public class Assignor {

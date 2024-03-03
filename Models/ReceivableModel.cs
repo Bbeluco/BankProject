@@ -7,6 +7,6 @@ public class ReceivableModel
     public DateTime Date { get; set; }
 
     //Foreign key reference
-    public int AssignorId { get; set; }
+    public string AssignorId { get; set; }
     public AssignorModel Assignor { get; set; }
 }
