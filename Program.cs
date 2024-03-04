@@ -19,7 +19,7 @@ builder.Services.AddDbContext<BankAppContext>(options => {
     options.UseSqlite(builder.Configuration.GetConnectionString("BankDB"));
 });
 
-builder.Services.AddScoped<IPayableService, PayableService>();
+builder.Services.AddScoped<IOperationsService, OperationsService>();
 builder.Services.AddScoped<IAssignorRepository, AssignorRepository>();
 builder.Services.AddScoped<IPayableRepository, PayableRepository>();
 
