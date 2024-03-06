@@ -40,6 +40,7 @@ public class OperationsService : IOperationsService
 
         var newAssignor = _assignorRepository.InsertAssignor(assignor);
 
+        System.Console.WriteLine(newAssignor == null);
         ReceivableModel receivable = new ReceivableModel() {
             Id = dto.Receivable.Id,
             Value = dto.Receivable.Value,
