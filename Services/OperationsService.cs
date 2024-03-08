@@ -36,7 +36,7 @@ public class OperationsService : IOperationsService
             Document = dto.Assignor.Document,
             Email = dto.Assignor.Email,
             Phone = dto.Assignor.Phone,
-            Name = dto.Assignor.Name
+            Name = dto.Assignor.Name,
         };
 
         var newAssignor = _assignorRepository.InsertAssignor(assignor);
