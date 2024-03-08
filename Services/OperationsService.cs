@@ -3,6 +3,7 @@ using System.Reflection;
 using System.Xml;
 using System.Xml.Schema;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.ObjectPool;
 using Microsoft.VisualBasic;
 
@@ -40,7 +41,6 @@ public class OperationsService : IOperationsService
 
         var newAssignor = _assignorRepository.InsertAssignor(assignor);
 
-        System.Console.WriteLine(newAssignor == null);
         ReceivableModel receivable = new ReceivableModel() {
             Id = dto.Receivable.Id,
             Value = dto.Receivable.Value,
@@ -52,7 +52,7 @@ public class OperationsService : IOperationsService
 
         ResponsePayableDTO resp = new ResponsePayableDTO(dto, newAssignor.AssignorId);
 
-        return Results.Ok(resp);
+        return TypedResults.Ok(resp);
     }
 
     public async Task<IResult> GetReceivableById(string id)
@@ -97,7 +97,8 @@ public class OperationsService : IOperationsService
 
     public async Task<IResult> DeleteAssignor(string id)
     {
-        return Results.Ok(_assignorRepository.DeleteAssignor(id));
+        _assignorRepository.DeleteAssignor(id);
+        return Results.NoContent();
     }
 
     public async Task<IResult> DeleteReceivable(string id)
