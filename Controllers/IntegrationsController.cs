@@ -1,18 +1,27 @@
 ﻿using System.Reflection.Metadata.Ecma335;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Http.HttpResults;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BankProject;
 
 [ApiController]
+[Authorize]
 public class IntegrationsController: ControllerBase
 {
 
     public IOperationsService _operationsService;
+    public ILoginService _loginService;
 
-    public IntegrationsController(IOperationsService payableService) {
+    public IntegrationsController(IOperationsService payableService, ILoginService loginService) {
         _operationsService = payableService;
+        _loginService = loginService;
+    }
+
+    [HttpPost("[controller]/auth")]
+    [AllowAnonymous]
+    public IResult Login([FromBody] LoginDTO dto) {
+        return _loginService.Login(dto);
     }
 
     [HttpPost("[controller]/payable")]
