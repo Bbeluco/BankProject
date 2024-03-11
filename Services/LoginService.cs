@@ -1,4 +1,6 @@
-﻿namespace BankProject;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+
+namespace BankProject;
 
 public class LoginService : ILoginService
 {
@@ -21,5 +23,10 @@ public class LoginService : ILoginService
             User = dto.Login,
             Token = _tokenService.GenerateToken(user)
         });
+    }
+
+    public IResult Register(LoginDTO dto)
+    {
+        return Results.Ok(_userRepository.RegisterUser(dto));
     }
 }

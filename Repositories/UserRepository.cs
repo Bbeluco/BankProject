@@ -14,8 +14,22 @@ public class UserRepository : IUserRepository
     {
         UserModel userDb = _bankAppContext.User
             .Where(u => u.User == dto.Login && u.Password == dto.Password)
-            .First();
+            .FirstOrDefault();
 
         return userDb;
+    }
+
+    public UserModel RegisterUser(LoginDTO dto)
+    {
+        UserModel user = new UserModel() {
+            User = dto.Login,
+            Password = dto.Password,
+            Role = "admin"
+        };
+
+        _bankAppContext.User.Add(user);
+        _bankAppContext.SaveChanges();
+
+        return user;
     }
 }

@@ -18,6 +18,12 @@ public class IntegrationsController: ControllerBase
         _loginService = loginService;
     }
 
+    [HttpPost("[controller]/register")]
+    [AllowAnonymous]
+    public IResult Register([FromBody] LoginDTO dto) {
+        return _loginService.Register(dto);
+    }
+
     [HttpPost("[controller]/auth")]
     [AllowAnonymous]
     public IResult Login([FromBody] LoginDTO dto) {
