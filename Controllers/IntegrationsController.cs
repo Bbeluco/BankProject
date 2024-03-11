@@ -26,7 +26,7 @@ public class IntegrationsController: ControllerBase
 
     [HttpPost("[controller]/auth")]
     [AllowAnonymous]
-    public IResult Login([FromBody] LoginDTO dto) {
+    public Task<IResult> Login([FromBody] LoginDTO dto) {
         return _loginService.Login(dto);
     }
 
